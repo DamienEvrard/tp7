@@ -55,14 +55,20 @@ public class BankingDAO {
 				// On débite le 1° client
 				statement.setFloat( 1, amount * -1);
 				statement.setInt(2, fromID);
+                                
 				int numberUpdated = statement.executeUpdate();
-
+                                if(numberUpdated==0){
+                                    throw new Exception("compte emeteur introuvable");
+                                }
 				// On crédite le 2° client
 				statement.clearParameters();
 				statement.setFloat( 1, amount);
 				statement.setInt(2, toID);
+                                
 				numberUpdated = statement.executeUpdate();
-
+                                if(numberUpdated==0){
+                                    throw new Exception("compte destinataire introuvable");
+                                }
 				// Tout s'est bien passé, on peut valider la transaction
 				myConnection.commit();
 			} catch (Exception ex) {
@@ -73,5 +79,5 @@ public class BankingDAO {
 				myConnection.setAutoCommit(true);				
 			}
 		}
-	}
+	}   
 }

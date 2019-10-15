@@ -63,7 +63,52 @@ public class BankingTest {
 		assertEquals("Balance incorrecte !", before0 - amount, myDAO.balanceForCustomer(fromCustomer), 0.001f);
 		assertEquals("Balance incorrecte !", before1 + amount, myDAO.balanceForCustomer(toCustomer), 0.001f);				
 	}
-	
+        
+        
+        @Test
+	public void balanceNegative() throws Exception {
+		float amount = 200f;
+		int fromCustomer = 0; // Le client 0 dispose de 100€ dans le jeu de tests
+		int toCustomer = 1;
+		// On exécute la transaction, qui doit réussir
+                try{
+                    myDAO.bankTransferTransaction(fromCustomer, toCustomer, amount);
+                    fail("total du cmpte negatif!");
+                }catch(Exception e){
+                    
+                }			
+	}
+        
+        @Test
+	public void failedTransferFrom() throws Exception {
+		float amount = 20f;
+		int fromCustomer = 10; // Le client 0 dispose de 100€ dans le jeu de tests
+		int toCustomer = 1;
+		// On exécute la transaction, qui doit réussir
+                try{
+                    myDAO.bankTransferTransaction(fromCustomer, toCustomer, amount);
+                    fail("compte emeteur introuvable!");
+                }catch(Exception e){
+                    
+                }			
+	}
+        
+        @Test
+	public void failedTransferTo() throws Exception {
+		float amount = 20f;
+		int fromCustomer = 0; // Le client 0 dispose de 100€ dans le jeu de tests
+		int toCustomer = 10;
+		// On exécute la transaction, qui doit réussir
+                try{
+                    myDAO.bankTransferTransaction(fromCustomer, toCustomer, amount);
+                    fail("compte destinataire introuvable!");
+                }catch(Exception e){
+                    
+                }			
+	}
+        
+        
+        
 
 	public static DataSource getDataSource() throws SQLException {
 		org.hsqldb.jdbc.JDBCDataSource ds = new org.hsqldb.jdbc.JDBCDataSource();
